@@ -154,7 +154,7 @@
 #define is_bool(...) _Generic((typeof(__VA_ARGS__)*){}, bool*:1, default:0)
 
 // Returns true if argument's type is is any kind of array, otherwise false. Note that pointers are not arrays.
-#define is_arr(...) (!(types_compatible_p(decay(__VA_ARGS__), WRAP(__VA_ARGS__)) || is_func(__VA_ARGS__)))
+#define is_arr(...) (!(types_compatible_p(decay(__VA_ARGS__), (__VA_ARGS__)) || is_func(__VA_ARGS__)))
 
 // Returns true if argument's type is is any kind of function, otherwise false. Note that function pointers are not functions.
 #define is_func(...) _Generic(*(typeof(__VA_ARGS__)*){}, typeof(__VA_ARGS__)*:1, default:0)
