@@ -175,7 +175,7 @@
 #define is_signed(...) ((~(typeof(__VA_ARGS__))0 < 0) && !types_compatible_p((__VA_ARGS__), char))
 
 // Returns true if argument is a fixed-length array, otherwise false.
-#define is_bounded_array(...) (is_array(__VA_ARGS__) && constant_p(sizeof(__VA_ARGS__)))
+#define is_bounded_array(...) (is_arr(__VA_ARGS__) && constant_p(sizeof(__VA_ARGS__)))
 
 // Returns true if argument is a variable-length array, otherwise false.
 #define is_unbounded_array(...) (!is_bounded_array(__VA_ARGS__))
