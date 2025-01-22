@@ -86,7 +86,7 @@
 
 // Returns true if argument is a constant expression, otherwise false.
 // This is NOT a drop-in replacement for gcc's __builtin_constant_p as it cannot handle structs.
-#define constant_p(...) _Generic((int(*)[1 + !(__VA_ARGS__)])0, int(*)[3]:0, default:0)
+#define constant_p(...) _Generic((int(*)[1 + !(__VA_ARGS__)])0, int(*)[3]:0, default:1)
 
 // Returns an expression with the type of type. If arg is not the correct type, an empty literal is returned.
 // This may be useful for working around the syntactic-validity requirements of unevaluated branches of the _Generic() selector.
