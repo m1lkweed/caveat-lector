@@ -178,7 +178,7 @@
 #define is_bounded_array(...) (is_arr(__VA_ARGS__) && constant_p(sizeof(__VA_ARGS__)))
 
 // Returns true if argument is a variable-length array, otherwise false.
-#define is_unbounded_array(...) (!is_bounded_array(__VA_ARGS__))
+#define is_unbounded_array(...) (is_arr(__VA_ARGS__) && !constant_p(sizeof(__VA_ARGS__)))
 
 // Returns true if argument is any kind of string literal, including wide, universal-character, or UTF-8; otherwise false.
 // will not return true for compound literals.
