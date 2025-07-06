@@ -169,10 +169,10 @@
 #define is_atomic(...) choose_expr(is_arr(__VA_ARGS__), 0, typecmp(typeof(typeof(choose_expr(is_arr(__VA_ARGS__), 0, __VA_ARGS__)) const volatile _Atomic), typeof(typeof(__VA_ARGS__) const volatile)))
 
 // Returns true if argument's type is unsigned. Cannot handle non-scalar types, otherwise false.
-#define is_unsigned(...) ((~(typeof(type_to_object(__VA_ARGS__)))0 > 0) && !types_compatible_p((__VA_ARGS__), char))
+#define is_unsigned(...) ((~(typeof(type_to_object(__VA_ARGS__)))0 > 0) && !types_compatible_p((type_to_object(__VA_ARGS__)), char))
 
 // Returns true if argument's type is signed, otherwise false. Cannot handle non-scalar types.
-#define is_signed(...) ((~(typeof(type_to_object(__VA_ARGS__)))0 < 0) && !types_compatible_p((__VA_ARGS__), char))
+#define is_signed(...) ((~(typeof(type_to_object(__VA_ARGS__)))0 < 0) && !types_compatible_p((type_to_object(__VA_ARGS__)), char))
 
 // Returns true if argument is a fixed-length array, otherwise false.
 #define is_bounded_array(...) (is_arr(__VA_ARGS__) && constant_p(sizeof(__VA_ARGS__)))
