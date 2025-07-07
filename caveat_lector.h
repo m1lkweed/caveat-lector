@@ -51,7 +51,7 @@
 // Compares types of both parameters. Returns true if the types are compatible, otherwise false.
 // Parameter y may not be a variably-modified type. Paramters may be types or expressions.
 // Designed to be a drop-in replacement for gcc's __builtin_types_compatible_p.
-#define types_compatible_p(x, y) _Generic((typeof_unqual(x)*){}, typeof_unqual(y)*:1, default:0)
+#define types_compatible_p(x, y) _Generic((typeof_unqual(x)*){}, typeof_unqual(type_to_object(y))*:1, default:0)
 
 // Compares qualified types of both parameters. Returns true if the types are compatible and like-qualified,
 // otherwise false. Parameters may be types or expressions.
