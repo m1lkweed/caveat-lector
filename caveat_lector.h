@@ -156,7 +156,7 @@
 // Returns true if argument's type is is any kind of array, otherwise false. Note that pointers are not arrays.
 #define is_arr(...) (!(types_compatible_p(decay(__VA_ARGS__), (__VA_ARGS__)) || is_func(__VA_ARGS__)))
 
-// Returns true if argument's type is is any kind of function, otherwise false. Note that function pointers are not functions.
+// Returns true if argument's type is is any kind of function or function pointer, otherwise false.
 #define is_func(...) _Generic(*(typeof(__VA_ARGS__)*){}, typeof(__VA_ARGS__)*:1, default:0)
 
 // Returns true if argument's type has a top-level `const` qualifier, otherwise false.
