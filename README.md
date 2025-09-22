@@ -146,3 +146,32 @@ Returns true if argument is literally the sequence `...`, otherwise false.
 ---
 Returns 1 if `bool` is the c23 keyword.
 If `bool` is a typedef then this returns 0.
+
+### `unsigned_integral_promotion(value)`
+---
+Forces "integral promotion" on `value` to use
+`unsigned int` instead of signed `int`.
+
+The advantage versus a cast is that wider
+types are left alone, which makes this
+convenient for macros which want to do
+unsigned arithmetic without having to
+know if `value` is an `unsigned short`
+or an `unsigned long` or whatever else.
+
+
+### `usual_arithmetic_conversions_with_type_of(expression, value)`
+---
+Changes the type of `value` while to the
+type that would result from performing
+the "usual arithmetic conversions" with
+`expression` and `value` as operands.
+
+`expression` is "evaluated", but optimizing
+compilers have no trouble optimizing it out
+into a no-op if it's free of side-effects.
+
+This is useful as a "cast" in type-generic
+macros, eliminating some situations where
+the macro would otherwise need to take a
+type name as a parameter.
