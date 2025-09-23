@@ -202,30 +202,16 @@ typeof(((typeof(qT)*){})->(q))) && (_Alignof(typeof(((typeof(pT)*){})->(p))) == 
 // If `bool` is a typedef then this returns 0.
 #define bool_is_c23_bool() (1 == (bool)0.5)
 
-// Forces "integral promotion" on `value` to
-// use `unsigned int` instead of signed `int`.
-//
-// The advantage versus a cast is that wider
-// types are left alone, which makes this
-// convenient for macros which want to do
-// unsigned arithmetic without having to
-// know if `value` is an `unsigned short`
-// or an `unsigned long` or whatever else.
-#define unsigned_integral_promotion(value) ((value) + (unsigned int )0)
+// Performs integer promotion on argument.
+// Cannot handle non-scalar arguments, this will hopefully change in the future.
+#define promote_scalar(...) ((__VA_ARGS__) + 0)
 
-// Change the type of `value` while to the type
-// that would result from performing the "usual
-// arithmetic conversions" with `expression`
-// and `value` as operands.
-//
-// `expression` is "evaluated", but optimizing
-// compilers have no trouble optimizing it out
-// into a no-op if it's free of side-effects.
-//
-// This is useful as a "cast" in type-generic
-// macros, eliminating some situations where
-// the macro would otherwise need to take a
-// type name as a parameter.
-#define usual_arithmetic_conversions_with_type_of(expression, value) (((expression) * 0) + (value))
+// Performs unsigned integer promotion on argument. Result may still be signed if argument has a greater type than `unsigned int`.
+// Cannot handle non-scalar arguments, this will hopefully change in the future.
+#define promote_scalar_unsigned(...) ((__VA_ARGS__) + 0U)
+
+// Cast value while to the promoted type of expression and value.
+// Cannot handle non-scalar arguments, this will hopefully change in the future.
+#define cast_with_promotions(expression, ...) (((expression) * 0) + (__VA_ARGS__))
 
 #endif // CAVEAT_LECTOR_H
