@@ -45,6 +45,8 @@
 #undef is_corresponding_member
 #undef is_ellipsis
 #undef bool_is_c23_bool
+#undef unsigned_integral_promotion
+#undef usual_arithmetic_conversions_with_type_of
 
 // Caveat lector: black magic lies below this line.
 
@@ -199,5 +201,17 @@ typeof(((typeof(qT)*){})->(q))) && (_Alignof(typeof(((typeof(pT)*){})->(p))) == 
 // Returns 1 if `bool` is the c23 keyword.
 // If `bool` is a typedef then this returns 0.
 #define bool_is_c23_bool() (1 == (bool)0.5)
+
+// Performs integer promotion on argument.
+// Cannot handle non-scalar arguments, this will hopefully change in the future.
+#define promote_scalar(...) ((__VA_ARGS__) + 0)
+
+// Performs unsigned integer promotion on argument. Result may still be signed if argument has a greater type than `unsigned int`.
+// Cannot handle non-scalar arguments, this will hopefully change in the future.
+#define promote_scalar_unsigned(...) ((__VA_ARGS__) + 0U)
+
+// Cast value while to the promoted type of expression and value.
+// Cannot handle non-scalar arguments, this will hopefully change in the future.
+#define cast_with_promotions(expression, ...) (((expression) * 0) + (__VA_ARGS__))
 
 #endif // CAVEAT_LECTOR_H
