@@ -2,9 +2,9 @@
 // (c)m1lkweed, 2024-2026 LGPLv3+
 
 // This header gets used in a lot of programs; this just makes sure the latest version is always used.
-#if !defined(CAVEAT_LECTOR_H) || (CAVEAT_LECTOR_H <= 2024101100ULL)
+#if !defined(CAVEAT_LECTOR_H) || (CAVEAT_LECTOR_H <= 2026031100ULL)
 #undef CAVEAT_LECTOR_H
-#define CAVEAT_LECTOR_H 2024101100ULL
+#define CAVEAT_LECTOR_H 2026031100ULL
 
 #undef types_compatible_p
 #undef typecmp
