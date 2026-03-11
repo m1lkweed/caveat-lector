@@ -1,5 +1,5 @@
 // Various convenience macros
-// (c)m1lkweed, 2024 LGPLv3+
+// (c)m1lkweed, 2024-2026 LGPLv3+
 
 // This header gets used in a lot of programs; this just makes sure the latest version is always used.
 #if !defined(CAVEAT_LECTOR_H) || (CAVEAT_LECTOR_H <= 2024101100ULL)
@@ -45,8 +45,8 @@
 #undef is_corresponding_member
 #undef is_ellipsis
 #undef bool_is_c23_bool
-#undef unsigned_integral_promotion
-#undef usual_arithmetic_conversions_with_type_of
+#undef internal_bitint_kludge
+#undef bit_width
 
 // Caveat lector: black magic lies below this line.
 
@@ -202,16 +202,28 @@ typeof(((typeof(qT)*){})->(q))) && (_Alignof(typeof(((typeof(pT)*){})->(p))) == 
 // If `bool` is a typedef then this returns 0.
 #define bool_is_c23_bool() (1 == (bool)0.5)
 
-// Performs integer promotion on argument.
-// Cannot handle non-scalar arguments, this will hopefully change in the future.
-#define promote_scalar(...) ((__VA_ARGS__) + 0)
+#define internal_bitint_kludge(cmp, x, add) (((((x) < (cmp))?((x) + (add)):(x)) > BITINT_MAXWIDTH)?BITINT_MAXWIDTH - (add):(((x) < (cmp))?((x) + (add)):(x)))
 
-// Performs unsigned integer promotion on argument. Result may still be signed if argument has a greater type than `unsigned int`.
-// Cannot handle non-scalar arguments, this will hopefully change in the future.
-#define promote_scalar_unsigned(...) ((__VA_ARGS__) + 0U)
-
-// Cast value while to the promoted type of expression and value.
-// Cannot handle non-scalar arguments, this will hopefully change in the future.
-#define cast_with_promotions(expression, ...) (((expression) * 0) + (__VA_ARGS__))
+// Returns bit-width of argument.
+// Only works on systems where CHAR_BIT == 8
+#define bit_width(...) (typeof(sizeof 0))_Generic((typeof(__VA_ARGS__)*){}, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 0, 8 + 0))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 0, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 1, 8 + 1))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 1, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 2, 8 + 2))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 2, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 3, 8 + 3))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 3, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 4, 8 + 4))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 4, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 5, 8 + 5))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 5, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 6, 8 + 6))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 6, \
+	  signed _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 7, 8 + 7))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 7, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 0, 8 + 0))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 0, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 1, 8 + 1))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 1, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 2, 8 + 2))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 2, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 3, 8 + 3))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 3, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 4, 8 + 4))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 4, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 5, 8 + 5))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 5, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 6, 8 + 6))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 6, \
+	unsigned _BitInt(internal_bitint_kludge(2, (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 7, 8 + 7))*: (sizeof((choose_expr(sizeof(__VA_ARGS__) > 1, (typeof(__VA_ARGS__)){}, (_BitInt(BITINT_MAXWIDTH)){}))) * 8) - 7, \
+	default: sizeof(__VA_ARGS__) * 8 \
+)
 
 #endif // CAVEAT_LECTOR_H
