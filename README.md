@@ -147,17 +147,7 @@ Returns true if argument is literally the sequence `...`, otherwise false.
 Returns 1 if `bool` is the c23 keyword.
 If `bool` is a typedef then this returns 0.
 
-### `promote_scalar(...)`
+### `bit_width(...)`
 ---
-Performs integer promotion on argument.
-Cannot handle non-scalar arguments, this will hopefully change in the future.
-
-### `promote_scalar_unsigned(...)`
----
-Performs unsigned integer promotion on argument. Result may still be signed if argument has a greater type than `unsigned int`.
-Cannot handle non-scalar arguments, this will hopefully change in the future.
-
-### `cast_with_promotions(expression, ...)`
----
-Cast value while to the promoted type of expression and value.
-Cannot handle non-scalar arguments, this will hopefully change in the future.
+Returns bit-width of argument.
+Only works on systems where `CHAR_BIT == 8`
